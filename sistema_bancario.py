@@ -1,3 +1,51 @@
+def depositar(saldo, valor, extrato):
+
+    if valor > 0:
+        saldo += valor
+        extrato += f"Depósito realizado de R$ {valor:.2f}\n"
+        print(f"Você depositou R$ {valor:.2f} com sucesso!")
+    else:
+        print("Valor inválido.")
+
+    return saldo, extrato
+
+def sacar(*, saldo, valor, extrato, limite, numero_saques):
+  
+    if saldo == 0:
+        print("É preciso ter dinheiro em conta para poder realizar saques.")
+            
+    elif valor <= 0:
+        print("Valor inválido.")
+                
+    elif valor > limite:
+        print(f"Não é permitido sacar um valor superior à R$ {limite:.2f}.")
+                
+    elif valor > saldo:
+        print("Saldo insuficiente.")
+                
+    else:
+        saldo -= valor
+        extrato += f"Saque realizado de R$ {valor:.2f}\n"
+        numero_saques += 1
+        print(f"Saque de R$ {valor:.2f} realizado com sucesso!")
+
+    return saldo, extrato, numero_saques
+
+def exibir_extrato(saldo, *, extrato):
+
+    if extrato == "":
+        print("Nenhuma movimentação foi realizada na sua conta ainda.")
+        
+    else:
+        string_1 = "Extrato"
+        print()
+        print(" Extrato ".center(41, "="))
+        print()
+        print(f"{extrato}")
+        print("-".center(41, "-"))
+        print(f"=> Saldo total: R$ {saldo:.2f}")
+        print("=".center(41, "="))
+
 menu = """
 
 [d] Depositar
@@ -17,14 +65,8 @@ while True:
     opcao = input(menu)
 
     if opcao == "d":
-        deposito = float(input("Informe o valor para deposito: "))
-
-        if deposito > 0:
-            saldo += deposito
-            extrato += f"Depósito realizado de R$ {deposito:.2f}\n"
-            print(f"Você depositou R$ {deposito:.2f} com sucesso!")
-        else:
-            print("Valor inválido.")
+        valor = float(input("Informe o valor para deposito: "))
+        saldo, extrato = depositar(saldo, valor, extrato)
     
     elif opcao == "s":
         if numero_saques == LIMITE_SAQUES:
@@ -32,37 +74,12 @@ while True:
         
         else:
             print(f"Saldo disponível: R$ {saldo:.2f}")
+            valor = float(input("\nInforme o valor para saque: "))
 
-            if saldo == 0:
-                print("É preciso ter dinheiro em conta para poder realizar saques.")
-            
-            else:
-                saque = float(input("\nInforme o valor para saque: "))
-
-                if saque <= 0:
-                    print("Valor inválido.")
-                
-                elif saque > limite:
-                    print(f"Não é permitido sacar um valor superior à R$ {limite:.2f}.")
-                
-                elif saque > saldo:
-                    print("Saldo insuficiente.")
-                
-                else:
-                    saldo -= saque
-                    extrato += f"Saque realizado de R$ {saque:.2f}\n"
-                    numero_saques += 1
-                    print(f"Saque de R$ {saque:.2f} realizado com sucesso!")
+            saldo, extrato, numero_saques = sacar(saldo=saldo, valor=valor, extrato=extrato, limite=limite, numero_saques=numero_saques)
         
-    
     elif opcao == "e":
-        if extrato == "":
-            print("Nenhuma movimentação foi realizada na sua conta ainda.")
-        
-        else:
-            print("### Extrato ###")
-            print(f"{extrato}")
-            print(f"=> Saldo total: R$ {saldo:.2f}")
+        exibir_extrato(saldo, extrato=extrato)
     
     elif opcao == "q":
         break
