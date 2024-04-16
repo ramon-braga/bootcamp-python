@@ -33,15 +33,16 @@ def sacar(*, saldo, valor, extrato, limite, numero_saques):
 
     return saldo, extrato, numero_saques
 
-def exibir_extrato(saldo, *, extrato):
+def exibir_extrato(saldo, *, extrato, nome):
 
     if extrato == "":
         print("Nenhuma movimentação foi realizada na sua conta ainda.")
         
     else:
-        string_1 = "Extrato"
         print()
         print(" Extrato ".center(41, "="))
+        print(f"Cliente: {nome}")
+        print("-".center(41, "-"))
         print()
         print(f"{extrato}")
         print("-".center(41, "-"))
@@ -89,7 +90,7 @@ def menu_operacoes_em_conta(cliente):
                 cliente["contas"][0]["extrato"] = extrato
             
         elif opcao == "e":
-            exibir_extrato(saldo, extrato=extrato)
+            exibir_extrato(saldo, extrato=extrato, nome=cliente["nome"])
         
         elif opcao == "q":
             break
